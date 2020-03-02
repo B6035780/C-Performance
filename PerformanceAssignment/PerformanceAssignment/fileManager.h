@@ -55,25 +55,48 @@ public:
 		fs.open(fileDirectory + "data.json", std::fstream::out);
 
 		fs << "{" << "\n";
-		fs << "\"entries\": [" << "\n";
-		std::for_each(entries.begin(), entries.end(), [&fs](Entry e)
+		fs << "\t" << "\"entries\": [" << "\n";																				//format as JSon array of entries
+		std::for_each(entries.begin(), entries.end(), [&fs](Entry e)														
 		{
-			fs << "{" << "\n";
-			fs << "\"SessionId\": \"" << e.sessionId << "\"," << "\n";
-			fs << "\"ipAddress\": \"" << e.ipaddress << "\"," << "\n";
-			fs << "\"browser\": \"" << e.browser << "\"," << "\n";
+			fs << "\t\t" << "{" << "\n";
+			fs << "\t\t\t" << "\"SessionId\": \"" << e.sessionId << "\"," << "\n";
+			fs << "\t\t\t" << "\"ipAddress\": \"" << e.ipaddress << "\"," << "\n";
+			fs << "\t\t\t" << "\"browser\": \"" << e.browser << "\"," << "\n";
 
-			fs << "\"pages\": [" << "\n";
+			fs << "\t\t\t" << "\"pages\": [";																				//Pages and times are held in their own Json array inside entries
 			std::for_each(e.pages.begin(), e.pages.end(), [&fs](std::pair<std::string, std::string> p)
 			{
-				fs << "{" << "\n";
-				fs << "\"Page\": \"" << p.first << "\"," << "\n";
-				fs << "\"Time\": \"" << p.second << "\"," << "\n";
-				fs << "}," << "\n";
+				fs << "\n\t\t\t\t" << "{" << "\n";
+				fs << "\t\t\t\t\t" << "\"Page\": \"" << p.first << "\"," << "\n";
+				fs << "\t\t\t\t\t" << "\"Time\": \"" << p.second << "\"" << "\n";
+				fs << "\t\t\t\t" << "},";
 			});
 
-			fs << "]" << "\n" << "}," << "\n";
+			fs.seekp(-1, std::ios_base::end);																				//Removes extra comma at the end of array
+			fs.write("\n", 1);
+
+			fs << "\t\t\t" << "]" << "\n" << "\t\t" << "}," << "\n";
 		});
+	}
+
+	void dataAnalysis()
+	{
+		std::fstream fs;
+		std::string fileDirectory = "F:/MyWork/Effective C++/Performance Assignment/PerformanceAssignment/Data/";
+		fs.open(fileDirectory + "statistics.json", std::fstream::out);
+
+		std::map<std::string, int> ipAddresses;
+
+		std::for_each(entries.begin(), entries.end(), [&ipAddresses, &fs](Entry e)
+		{
+			std::for_each(e.pages.begin(), e.pages.end(), [](std::pair<std::string, std::string> p)
+			{
+
+			});
+
+		});
+
+
 	}
 
 	~fileManager() { fs.close(); }
