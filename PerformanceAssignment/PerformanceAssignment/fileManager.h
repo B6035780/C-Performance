@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <functional>
 #include <map>
 #include <vector>
 
@@ -86,15 +87,8 @@ public:
 		fs.open(fileDirectory + "statistics.json", std::fstream::out);
 
 		std::map<std::string, int> ipAddresses;
-
-		std::for_each(entries.begin(), entries.end(), [&ipAddresses, &fs](Entry e)
-		{
-			std::for_each(e.pages.begin(), e.pages.end(), [](std::pair<std::string, std::string> p)
-			{
-
-			});
-
-		});
+		
+		std::for_each(entries.begin(), entries.end(), std::bind(&fileManager::timeSpentByUser, this, std::placeholders::_1));
 
 
 	}
@@ -103,6 +97,21 @@ public:
 private:
 	std::fstream fs;
 	std::vector<Entry> entries;
+
+	void timeSpentByUser(Entry e)
+	{
+		std::string startTime, endTime, temp;
+		int day, month, year;
+		float sec, min, hour;
+
+		startTime = e.pages.begin()->second;
+		std::map<std::string, std::string>::iterator it = e.pages.end();
+		--it;
+		endTime = it->second;
+		temp = startTime.substr(0, startTime.find("/"));
+		day = std::stoi(temp);															//stoi == string to int
+		++it;
+	}
 };
 
 #endif
