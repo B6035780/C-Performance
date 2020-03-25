@@ -19,7 +19,7 @@ class fileManager
 public:
 	void openFile(std::string fileName = "testdata_short.txt")
 	{
-		std::string fileDirectory = "F:/MyWork/Effective C++/Performance Assignment/PerformanceAssignment/Data/";
+		std::string fileDirectory = "C:/Users/julie/source/repos/C-Performance/PerformanceAssignment/Data/";
 		fs.open(fileDirectory + fileName);
 	}
 
@@ -52,7 +52,7 @@ public:
 	void convertToJson()
 	{
 		std::fstream fs;
-		std::string fileDirectory = "F:/MyWork/Effective C++/Performance Assignment/PerformanceAssignment/Data/";
+		std::string fileDirectory = "C:/Users/julie/source/repos/C-Performance/PerformanceAssignment/Data/";
 		fs.open(fileDirectory + "data.json", std::fstream::out);
 
 		fs << "{" << "\n";
@@ -78,12 +78,17 @@ public:
 
 			fs << "\t\t\t" << "]" << "\n" << "\t\t" << "}," << "\n";
 		});
+
+		fs.seekp(-3, std::ios_base::end);																				//Removes extra comma at the end of array
+		fs.write("\n", 1);
+		fs << "\t" << "]" << "\n";
+		fs << "}";
 	}
 
 	void dataAnalysis()
 	{
 		std::fstream fs;
-		std::string fileDirectory = "F:/MyWork/Effective C++/Performance Assignment/PerformanceAssignment/Data/";
+		std::string fileDirectory = "C:/Users/julie/source/repos/C-Performance/PerformanceAssignment/Data/";
 		fs.open(fileDirectory + "statistics.json", std::fstream::out);
 
 		std::map<std::string, int> ipAddresses;
